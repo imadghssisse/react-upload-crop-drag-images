@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ImageUploader from "./package";
+import ImageUploader from "./package/src/index.ts";
 function App() {
   const [pictures, setPictures] = useState([]);
   const onDrop = (pictureFiles, pictureDataURLs) => {
@@ -16,6 +16,7 @@ function App() {
         maxFileSize={5242880}
         withPreview={true}
         crop={true}
+        isSortable={true}
       />
     </div>
   );

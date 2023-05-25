@@ -24,6 +24,7 @@ interface Props {
   singleImage?: boolean
   style?: object
   defaultImages?: string[],
-  crop?: boolean
+  crop?: boolean,
+  isSortable?: boolean
 }
 export default class ImageUploader extends Component<Props> { }

@@ -6,6 +6,9 @@ import UploadIcon from '../../public/UploadIcon.svg';
 import Crop from './crop.js';
 import EditSvg from '../../public/EditSvg.svg';
 
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+
+
 const styles = {
   display: "flex",
   alignItems: "center",
@@ -43,15 +46,6 @@ class ImageUploader extends React.Component {
       this.setState({ pictures: prevProps.defaultImages });
     }
   }
-
-  // /*
-  //  Load image at the beggining if defaultImage prop exists
-  //  */
-  // componentWillReceiveProps(nextProps) {
-  //   if (nextProps.defaultImages !== this.props.defaultImages) {
-  //     this.setState({ pictures: nextProps.defaultImages });
-  //   }
-  // }
 
   /*
    Check file extension (onDropFile)
@@ -190,7 +184,7 @@ class ImageUploader extends React.Component {
     return (
       <div className="uploadPicturesWrapper">
         <FlipMove enterAnimation="fade" leaveAnimation="fade" style={styles}>
-          {this.renderPreviewPictures()}
+          {this.props.isSortable ? this.renderPreviewPicturesSortable() : this.renderPreviewPictures()}
         </FlipMove>
         {
           this.props.crop && <Crop ref={this.childRef} pictures={this.state.pictures} setPictures={(e) => this.setPictures(e)} />
@@ -198,6 +192,39 @@ class ImageUploader extends React.Component {
       </div>
     );
   }
+
+
+
+  renderPreviewPicturesSortable() {
+    const SortableItem = SortableElement(({ picture, index }) =>
+      <div className="uploadPictureContainer">
+        <div className="deleteImage" onClick={() => this.removeImage(picture)}>X</div>
+        {
+          this.props.crop && (
+            <div className="editImage" onClick={() => this.displayModal(picture, index)}>
+              <img src={EditSvg} className="EditSvg" alt="Edit Svg" />
+            </div>
+          )
+        }
+        <img src={picture} className="uploadPicture" alt="preview" />
+      </div>);
+
+    const SortableList = SortableContainer(({ items }) => {
+      return (
+        <div className="b-isSortable">
+          {items.map((picture, index) => (
+            <SortableItem key={`item-${index}`} index={index} picture={picture} />
+          ))}
+        </div>
+      );
+    });
+    const onSortEnd = ({ oldIndex, newIndex }) => {
+      console.log(oldIndex, newIndex);
+    }
+
+    return <SortableList items={this.state.pictures} onSortEnd={onSortEnd} axis="xy" />
+  }
+
 
   renderPreviewPictures() {
     return this.state.pictures.map((picture, index) => {
@@ -294,7 +321,8 @@ ImageUploader.defaultProps = {
   singleImage: false,
   onChange: () => { },
   defaultImages: [],
-  crop: false
+  crop: false,
+  isSortable: false
 };
 
 ImageUploader.propTypes = {
@@ -323,7 +351,8 @@ ImageUploader.propTypes = {
   errorStyle: PropTypes.object,
   singleImage: PropTypes.bool,
   defaultImages: PropTypes.array,
-  crop: PropTypes.bool
+  crop: PropTypes.bool,
+  isSortable: PropTypes.bool
 };
 
 export default ImageUploader;
