@@ -1,12 +1,15 @@
-import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
-import '../../public/index.css';
-import FlipMove from 'react-flip-move';
-import UploadIcon from '../../public/UploadIcon.svg';
-import Crop from './crop.js';
-import EditSvg from '../../public/EditSvg.svg';
-import { SortableContainer, SortableElement } from 'react-sortable-hoc';
-import { arrayMoveImmutable } from 'array-move';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = require("tslib");
+const react_1 = tslib_1.__importStar(require("react"));
+const prop_types_1 = tslib_1.__importDefault(require("prop-types"));
+require("../../public/index.css");
+const react_flip_move_1 = tslib_1.__importDefault(require("react-flip-move"));
+const UploadIcon_svg_1 = tslib_1.__importDefault(require("../../public/UploadIcon.svg"));
+const crop_js_1 = tslib_1.__importDefault(require("./crop.js"));
+const EditSvg_svg_1 = tslib_1.__importDefault(require("../../public/EditSvg.svg"));
+const react_sortable_hoc_1 = require("react-sortable-hoc");
+const array_move_1 = require("array-move");
 const styles = {
     display: "flex",
     alignItems: "center",
@@ -18,7 +21,7 @@ const ERROR = {
     NOT_SUPPORTED_EXTENSION: 'NOT_SUPPORTED_EXTENSION',
     FILESIZE_TOO_LARGE: 'FILESIZE_TOO_LARGE'
 };
-class ImageUploader extends React.Component {
+class ImageUploader extends react_1.default.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -30,7 +33,7 @@ class ImageUploader extends React.Component {
         this.onDropFile = this.onDropFile.bind(this);
         this.onUploadClick = this.onUploadClick.bind(this);
         this.triggerFileUpload = this.triggerFileUpload.bind(this);
-        this.childRef = React.createRef();
+        this.childRef = react_1.default.createRef();
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevState.files !== this.state.files) {
@@ -129,7 +132,7 @@ class ImageUploader extends React.Component {
     renderErrors() {
         const { fileErrors } = this.state;
         return fileErrors.map((fileError, index) => {
-            return (React.createElement("div", { className: 'errorMessage ' + this.props.errorClass, key: index, style: this.props.errorStyle },
+            return (react_1.default.createElement("div", { className: 'errorMessage ' + this.props.errorClass, key: index, style: this.props.errorStyle },
                 "* ",
                 fileError.name,
                 " ",
@@ -141,7 +144,7 @@ class ImageUploader extends React.Component {
      */
     renderIcon() {
         if (this.props.withIcon) {
-            return React.createElement("img", { src: UploadIcon, className: "uploadIcon", alt: "Upload Icon" });
+            return react_1.default.createElement("img", { src: UploadIcon_svg_1.default, className: "uploadIcon", alt: "Upload Icon" });
         }
     }
     /*
@@ -149,16 +152,16 @@ class ImageUploader extends React.Component {
      */
     renderLabel() {
         if (this.props.withLabel) {
-            return React.createElement("p", { className: this.props.labelClass, style: this.props.labelStyles }, this.props.label);
+            return react_1.default.createElement("p", { className: this.props.labelClass, style: this.props.labelStyles }, this.props.label);
         }
     }
     /*
      Render preview images
      */
     renderPreview() {
-        return (React.createElement("div", { className: "uploadPicturesWrapper" },
-            React.createElement(FlipMove, { enterAnimation: "fade", leaveAnimation: "fade", style: styles }, this.props.isSortable ? this.renderPreviewPicturesSortable() : this.renderPreviewPictures()),
-            this.props.crop && React.createElement(Crop, { ref: this.childRef, pictures: this.state.pictures, setPictures: (e) => this.setPictures(e) })));
+        return (react_1.default.createElement("div", { className: "uploadPicturesWrapper" },
+            react_1.default.createElement(react_flip_move_1.default, { enterAnimation: "fade", leaveAnimation: "fade", style: styles }, this.props.isSortable ? this.renderPreviewPicturesSortable() : this.renderPreviewPictures()),
+            this.props.crop && react_1.default.createElement(crop_js_1.default, { ref: this.childRef, pictures: this.state.pictures, setPictures: (e) => this.setPictures(e) })));
     }
     renderPreviewPicturesSortable() {
         const targetHasProp = (target, hasProp) => {
@@ -181,32 +184,32 @@ class ImageUploader extends React.Component {
                 return ['button'].includes(el.tagName.toLowerCase());
             });
         };
-        const SortableItem = SortableElement(({ picture, sortIndex }) => {
-            return (React.createElement("div", { className: "uploadPictureContainer" },
-                React.createElement("div", { className: "deleteImage", onClick: () => this.removeImage(picture) }, "X"),
-                this.props.crop && (React.createElement("div", { className: "editImage", onClick: () => this.displayModal(picture, sortIndex) },
-                    React.createElement("img", { src: EditSvg, className: "EditSvg", alt: "Edit Svg" }))),
-                React.createElement("img", { src: picture, className: "uploadPicture", alt: "preview" })));
+        const SortableItem = (0, react_sortable_hoc_1.SortableElement)(({ picture, sortIndex }) => {
+            return (react_1.default.createElement("div", { className: "uploadPictureContainer" },
+                react_1.default.createElement("div", { className: "deleteImage", onClick: () => this.removeImage(picture) }, "X"),
+                this.props.crop && (react_1.default.createElement("div", { className: "editImage", onClick: () => this.displayModal(picture, sortIndex) },
+                    react_1.default.createElement("img", { src: EditSvg_svg_1.default, className: "EditSvg", alt: "Edit Svg" }))),
+                react_1.default.createElement("img", { src: picture, className: "uploadPicture", alt: "preview" })));
         });
-        const SortableList = SortableContainer(({ items }) => {
-            return (React.createElement("div", { className: "b-isSortable" }, items.map((picture, index) => {
-                return React.createElement(SortableItem, { key: `item-${index}`, index: index, picture: picture, sortIndex: index });
+        const SortableList = (0, react_sortable_hoc_1.SortableContainer)(({ items }) => {
+            return (react_1.default.createElement("div", { className: "b-isSortable" }, items.map((picture, index) => {
+                return react_1.default.createElement(SortableItem, { key: `item-${index}`, index: index, picture: picture, sortIndex: index });
             })));
         });
         const onSortEnd = ({ oldIndex, newIndex }) => {
             this.setState(({ items }) => ({
-                pictures: arrayMoveImmutable(this.state.pictures, oldIndex, newIndex),
+                pictures: (0, array_move_1.arrayMoveImmutable)(this.state.pictures, oldIndex, newIndex),
             }));
         };
-        return React.createElement(SortableList, { items: this.state.pictures, onSortEnd: onSortEnd, axis: "xy", shouldCancelStart: shouldCancelSortStart });
+        return react_1.default.createElement(SortableList, { items: this.state.pictures, onSortEnd: onSortEnd, axis: "xy", shouldCancelStart: shouldCancelSortStart });
     }
     renderPreviewPictures() {
         return this.state.pictures.map((picture, index) => {
-            return (React.createElement("div", { key: index, className: "uploadPictureContainer" },
-                React.createElement("div", { className: "deleteImage", onClick: () => this.removeImage(picture) }, "X"),
-                this.props.crop && (React.createElement("div", { className: "editImage", onClick: () => this.displayModal(picture, index) },
-                    React.createElement("img", { src: EditSvg, className: "EditSvg", alt: "Edit Svg" }))),
-                React.createElement("img", { src: picture, className: "uploadPicture", alt: "preview" })));
+            return (react_1.default.createElement("div", { key: index, className: "uploadPictureContainer" },
+                react_1.default.createElement("div", { className: "deleteImage", onClick: () => this.removeImage(picture) }, "X"),
+                this.props.crop && (react_1.default.createElement("div", { className: "editImage", onClick: () => this.displayModal(picture, index) },
+                    react_1.default.createElement("img", { src: EditSvg_svg_1.default, className: "EditSvg", alt: "Edit Svg" }))),
+                react_1.default.createElement("img", { src: picture, className: "uploadPicture", alt: "preview" })));
         });
     }
     displayModal(picture, index) {
@@ -227,13 +230,13 @@ class ImageUploader extends React.Component {
         this.setState({ pictures: [] });
     }
     render() {
-        return (React.createElement("div", { className: "fileUploader " + this.props.className, style: this.props.style },
-            React.createElement("div", { className: "fileContainer", style: this.props.fileContainerStyle },
+        return (react_1.default.createElement("div", { className: "fileUploader " + this.props.className, style: this.props.style },
+            react_1.default.createElement("div", { className: "fileContainer", style: this.props.fileContainerStyle },
                 this.renderIcon(),
                 this.renderLabel(),
-                React.createElement("div", { className: "errorsContainer" }, this.renderErrors()),
-                React.createElement("button", { type: this.props.buttonType, className: "chooseFileButton " + this.props.buttonClassName, style: this.props.buttonStyles, onClick: this.triggerFileUpload }, this.props.buttonText),
-                React.createElement("input", { type: "file", ref: input => this.inputElement = input, name: this.props.name, multiple: !this.props.singleImage, onChange: this.onDropFile, onClick: this.onUploadClick, accept: this.props.accept }),
+                react_1.default.createElement("div", { className: "errorsContainer" }, this.renderErrors()),
+                react_1.default.createElement("button", { type: this.props.buttonType, className: "chooseFileButton " + this.props.buttonClassName, style: this.props.buttonStyles, onClick: this.triggerFileUpload }, this.props.buttonText),
+                react_1.default.createElement("input", { type: "file", ref: input => this.inputElement = input, name: this.props.name, multiple: !this.props.singleImage, onChange: this.onDropFile, onClick: this.onUploadClick, accept: this.props.accept }),
                 this.props.withPreview ? this.renderPreview() : null)));
     }
 }
@@ -266,33 +269,33 @@ ImageUploader.defaultProps = {
     isSortable: false
 };
 ImageUploader.propTypes = {
-    style: PropTypes.object,
-    fileContainerStyle: PropTypes.object,
-    className: PropTypes.string,
-    onChange: PropTypes.func,
-    onDelete: PropTypes.func,
-    buttonClassName: PropTypes.string,
-    buttonStyles: PropTypes.object,
-    buttonType: PropTypes.string,
-    withPreview: PropTypes.bool,
-    accept: PropTypes.string,
-    name: PropTypes.string,
-    withIcon: PropTypes.bool,
-    buttonText: PropTypes.string,
-    withLabel: PropTypes.bool,
-    label: PropTypes.string,
-    labelStyles: PropTypes.object,
-    labelClass: PropTypes.string,
-    imgExtension: PropTypes.array,
-    maxFileSize: PropTypes.number,
-    fileSizeError: PropTypes.string,
-    fileTypeError: PropTypes.string,
-    errorClass: PropTypes.string,
-    errorStyle: PropTypes.object,
-    singleImage: PropTypes.bool,
-    defaultImages: PropTypes.array,
-    crop: PropTypes.bool,
-    isSortable: PropTypes.bool
+    style: prop_types_1.default.object,
+    fileContainerStyle: prop_types_1.default.object,
+    className: prop_types_1.default.string,
+    onChange: prop_types_1.default.func,
+    onDelete: prop_types_1.default.func,
+    buttonClassName: prop_types_1.default.string,
+    buttonStyles: prop_types_1.default.object,
+    buttonType: prop_types_1.default.string,
+    withPreview: prop_types_1.default.bool,
+    accept: prop_types_1.default.string,
+    name: prop_types_1.default.string,
+    withIcon: prop_types_1.default.bool,
+    buttonText: prop_types_1.default.string,
+    withLabel: prop_types_1.default.bool,
+    label: prop_types_1.default.string,
+    labelStyles: prop_types_1.default.object,
+    labelClass: prop_types_1.default.string,
+    imgExtension: prop_types_1.default.array,
+    maxFileSize: prop_types_1.default.number,
+    fileSizeError: prop_types_1.default.string,
+    fileTypeError: prop_types_1.default.string,
+    errorClass: prop_types_1.default.string,
+    errorStyle: prop_types_1.default.object,
+    singleImage: prop_types_1.default.bool,
+    defaultImages: prop_types_1.default.array,
+    crop: prop_types_1.default.bool,
+    isSortable: prop_types_1.default.bool
 };
-export default ImageUploader;
+exports.default = ImageUploader;
 //# sourceMappingURL=index.js.map
