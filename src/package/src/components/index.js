@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import './index.css';
+import '../../public/index.css';
 import FlipMove from 'react-flip-move';
-import UploadIcon from './UploadIcon.svg';
+import UploadIcon from '../../public/UploadIcon.svg';
 import Crop from './crop.js';
-import EditSvg from './EditSvg.svg';
+import EditSvg from '../../public/EditSvg.svg';
 
 const styles = {
   display: "flex",

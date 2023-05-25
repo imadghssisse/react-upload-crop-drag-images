@@ -1,8 +1,8 @@
 import React from 'react';
 import Cropper from 'react-easy-crop';
-import getCroppedImg from './cropImage.js';
-import './style.css';
-import SaveSvg from './SaveSvg.svg';
+import getCroppedImg from './cropImage';
+import '../../public/style.css';
+import SaveSvg from '../../public/SaveSvg.svg';
 
 export default class Crop extends React.Component {
     constructor(props) {

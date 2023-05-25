@@ -1,26 +1,20 @@
 {
   "name": "react-upload-crop-drag-images-demo",
-  "version": "0.0.1",
-  "private": false,
-  "main": "index.js",
+  "version": "0.0.8",
+  "description": "",
   "repository": {
     "type": "git",
     "url": "git@github.com:imadghssisse/react-upload-crop-drag-images.git"
   },
-  "dependencies": {
-    "react": "^16.3.0",
-    "react-easy-crop": "^4.7.4",
-    "react-flip-move": "^3.0.4"
-  },
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
   "scripts": {
-    "build": "tsc"
-  },
-  "babel": {
-    "presets": [
-      "env",
-      "react",
-      "stage-2"
-    ]
+    "build": "yarn clean && yarn build:esm && yarn copy-files && yarn build:cjs",
+    "build:esm": "tsc",
+    "build:cjs": "tsc --module commonjs --outDir dist/cjs",
+    "clean": "rimraf dist/",
+    "copy-files": "copyfiles -u 1 public/* dist/public"
   },
   "keywords": [
     "image",
@@ -30,16 +24,18 @@
     "react crop",
     "react drag image"
   ],
-  "license": "MIT",
-  "peerDependencies": {
-    "react": "^16.3.0",
-    "react-dom": "^16.3.0"
-  },
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1"
+    "@types/react": "^18.2.7",
+    "copyfiles": "^2.4.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rimraf": "^5.0.1",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "react-easy-crop": "^4.7.4",
+    "react-flip-move": "^3.0.4"
   }
 }

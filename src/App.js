@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ImageUploader from "./package/src";
+import ImageUploader from "./package";
 function App() {
   const [pictures, setPictures] = useState([]);
   const onDrop = (pictureFiles, pictureDataURLs) => {

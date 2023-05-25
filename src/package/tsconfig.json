@@ -25,6 +25,6 @@
       "forceConsistentCasingInFileNames": true,
       "target": "esnext",
       "allowJs": true,
-      "checkJs": false,
+      "checkJs": false
     }
   }
