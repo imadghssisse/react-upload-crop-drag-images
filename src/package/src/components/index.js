@@ -7,7 +7,7 @@ import Crop from './crop.js';
 import EditSvg from '../../public/EditSvg.svg';
 
 import { SortableContainer, SortableElement, SortEvent, SortEventWithTag } from 'react-sortable-hoc';
-
+import { arrayMoveImmutable } from 'array-move';
 
 const styles = {
   display: "flex",
@@ -248,7 +248,9 @@ class ImageUploader extends React.Component {
       );
     });
     const onSortEnd = ({ oldIndex, newIndex }) => {
-      console.log(oldIndex, newIndex);
+      this.setState(({items}) => ({
+        pictures: arrayMoveImmutable(this.state.pictures, oldIndex, newIndex),
+      }));
     }
 
     return <SortableList items={this.state.pictures} onSortEnd={onSortEnd} axis="xy" shouldCancelStart={shouldCancelSortStart} />
