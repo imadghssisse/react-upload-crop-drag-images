@@ -126,7 +126,7 @@
   position: absolute;
 }
 
-.fileContainer .editImage .EditSvg {
+.editImage .EditSvg {
   position: absolute;
   top: -9px;
   left: -9px;
@@ -137,4 +137,9 @@
   line-height: 30px;
   width: 30px;
   height: 30px;
+}
+
+.b-isSortable {
+  display: flex;
+  flex-wrap: wrap;
 }

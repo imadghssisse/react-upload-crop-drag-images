@@ -1,6 +1,6 @@
 {
   "name": "react-upload-crop-drag-images-demo",
-  "version": "0.0.8",
+  "version": "0.0.12",
   "description": "",
   "repository": {
     "type": "git",
@@ -37,6 +37,7 @@
   "dependencies": {
     "array-move": "^4.0.0",
     "react-easy-crop": "^4.7.4",
-    "react-flip-move": "^3.0.4"
+    "react-flip-move": "^3.0.4",
+    "react-sortable-hoc": "^2.0.0"
   }
 }

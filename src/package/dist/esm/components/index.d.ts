@@ -19,6 +19,7 @@ declare class ImageUploader extends React.Component<any, any, any> {
     renderIcon(): React.JSX.Element | undefined;
     renderLabel(): React.JSX.Element | undefined;
     renderPreview(): React.JSX.Element;
+    renderPreviewPicturesSortable(): React.JSX.Element;
     renderPreviewPictures(): React.JSX.Element[];
     displayModal(picture: any, index: any): void;
     setPictures(props: any): void;
@@ -52,6 +53,7 @@ declare namespace ImageUploader {
         function onChange(): void;
         const defaultImages: never[];
         const crop: boolean;
+        const isSortable: boolean;
     }
     namespace propTypes {
         const style_1: PropTypes.Requireable<object>;
@@ -105,6 +107,8 @@ declare namespace ImageUploader {
         export { defaultImages_1 as defaultImages };
         const crop_1: PropTypes.Requireable<boolean>;
         export { crop_1 as crop };
+        const isSortable_1: PropTypes.Requireable<boolean>;
+        export { isSortable_1 as isSortable };
     }
 }
 import React from 'react';

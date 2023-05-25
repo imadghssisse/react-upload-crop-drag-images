@@ -5,6 +5,7 @@ import FlipMove from 'react-flip-move';
 import UploadIcon from '../../public/UploadIcon.svg';
 import Crop from './crop.js';
 import EditSvg from '../../public/EditSvg.svg';
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 const styles = {
     display: "flex",
     alignItems: "center",
@@ -38,14 +39,6 @@ class ImageUploader extends React.Component {
             this.setState({ pictures: prevProps.defaultImages });
         }
     }
-    // /*
-    //  Load image at the beggining if defaultImage prop exists
-    //  */
-    // componentWillReceiveProps(nextProps) {
-    //   if (nextProps.defaultImages !== this.props.defaultImages) {
-    //     this.setState({ pictures: nextProps.defaultImages });
-    //   }
-    // }
     /*
      Check file extension (onDropFile)
      */
@@ -163,8 +156,22 @@ class ImageUploader extends React.Component {
      */
     renderPreview() {
         return (React.createElement("div", { className: "uploadPicturesWrapper" },
-            React.createElement(FlipMove, { enterAnimation: "fade", leaveAnimation: "fade", style: styles }, this.renderPreviewPictures()),
+            React.createElement(FlipMove, { enterAnimation: "fade", leaveAnimation: "fade", style: styles }, this.props.isSortable ? this.renderPreviewPicturesSortable() : this.renderPreviewPictures()),
             this.props.crop && React.createElement(Crop, { ref: this.childRef, pictures: this.state.pictures, setPictures: (e) => this.setPictures(e) })));
+    }
+    renderPreviewPicturesSortable() {
+        const SortableItem = SortableElement(({ picture, index }) => React.createElement("div", { className: "uploadPictureContainer" },
+            React.createElement("div", { className: "deleteImage", onClick: () => this.removeImage(picture) }, "X"),
+            this.props.crop && (React.createElement("div", { className: "editImage", onClick: () => this.displayModal(picture, index) },
+                React.createElement("img", { src: EditSvg, className: "EditSvg", alt: "Edit Svg" }))),
+            React.createElement("img", { src: picture, className: "uploadPicture", alt: "preview" })));
+        const SortableList = SortableContainer(({ items }) => {
+            return (React.createElement("div", { className: "b-isSortable" }, items.map((picture, index) => (React.createElement(SortableItem, { key: `item-${index}`, index: index, picture: picture })))));
+        });
+        const onSortEnd = ({ oldIndex, newIndex }) => {
+            console.log(oldIndex, newIndex);
+        };
+        return React.createElement(SortableList, { items: this.state.pictures, onSortEnd: onSortEnd, axis: "xy" });
     }
     renderPreviewPictures() {
         return this.state.pictures.map((picture, index) => {
@@ -228,7 +235,8 @@ ImageUploader.defaultProps = {
     singleImage: false,
     onChange: () => { },
     defaultImages: [],
-    crop: false
+    crop: false,
+    isSortable: false
 };
 ImageUploader.propTypes = {
     style: PropTypes.object,
@@ -256,7 +264,8 @@ ImageUploader.propTypes = {
     errorStyle: PropTypes.object,
     singleImage: PropTypes.bool,
     defaultImages: PropTypes.array,
-    crop: PropTypes.bool
+    crop: PropTypes.bool,
+    isSortable: PropTypes.bool
 };
 export default ImageUploader;
 //# sourceMappingURL=index.js.map

@@ -6,7 +6,7 @@ import UploadIcon from '../../public/UploadIcon.svg';
 import Crop from './crop.js';
 import EditSvg from '../../public/EditSvg.svg';
 
-import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import { SortableContainer, SortableElement, SortEvent, SortEventWithTag } from 'react-sortable-hoc';
 
 
 const styles = {
@@ -140,6 +140,7 @@ class ImageUploader extends React.Component {
     const filteredPictures = this.state.pictures.filter((e, index) => index !== removeIndex);
     const filteredFiles = this.state.files.filter((e, index) => index !== removeIndex);
 
+    console.log(this.state.pictures);
     this.setState({ pictures: filteredPictures, files: filteredFiles }, () => {
       this.props.onChange(this.state.files, this.state.pictures);
     });
@@ -196,25 +197,53 @@ class ImageUploader extends React.Component {
 
 
   renderPreviewPicturesSortable() {
-    const SortableItem = SortableElement(({ picture, index }) =>
-      <div className="uploadPictureContainer">
-        <div className="deleteImage" onClick={() => this.removeImage(picture)}>X</div>
-        {
-          this.props.crop && (
-            <div className="editImage" onClick={() => this.displayModal(picture, index)}>
-              <img src={EditSvg} className="EditSvg" alt="Edit Svg" />
-            </div>
-          )
+
+    const targetHasProp = (
+      target: Element | null,
+      hasProp: (target: Element) => boolean,
+    ): boolean => {
+      while (target) {
+        if (hasProp(target)) {
+          return true;
         }
-        <img src={picture} className="uploadPicture" alt="preview" />
-      </div>);
+        if(target.className === "deleteImage" || target.className === "editImage") {
+          target.click();
+          return true;
+        }
+        // eslint-disable-next-line no-param-reassign
+        target = target.parentElement;
+      }
+      return false;
+    };
+    const shouldCancelSortStart = (coach: SortEvent | SortEventWithTag): boolean => {
+      // Cancel sort if a user is interacting with a given element
+      return targetHasProp(coach.target, (el) => {
+        return ['button'].includes(el.tagName.toLowerCase());
+      });
+    };
+
+    const SortableItem = SortableElement(({ picture, sortIndex }) => {
+      return (
+        <div className="uploadPictureContainer">
+          <div className="deleteImage" onClick={() => this.removeImage(picture)}>X</div>
+          {
+            this.props.crop && (
+              <div className="editImage" onClick={() => this.displayModal(picture, sortIndex)}>
+                <img src={EditSvg} className="EditSvg" alt="Edit Svg" />
+              </div>
+            )
+          }
+          <img src={picture} className="uploadPicture" alt="preview" />
+        </div>
+      )
+    })
 
     const SortableList = SortableContainer(({ items }) => {
       return (
         <div className="b-isSortable">
-          {items.map((picture, index) => (
-            <SortableItem key={`item-${index}`} index={index} picture={picture} />
-          ))}
+          {items.map((picture, index) => {
+            return <SortableItem key={`item-${index}`} index={index} picture={picture} sortIndex={index} />
+          })}
         </div>
       );
     });
@@ -222,7 +251,7 @@ class ImageUploader extends React.Component {
       console.log(oldIndex, newIndex);
     }
 
-    return <SortableList items={this.state.pictures} onSortEnd={onSortEnd} axis="xy" />
+    return <SortableList items={this.state.pictures} onSortEnd={onSortEnd} axis="xy" shouldCancelStart={shouldCancelSortStart} />
   }
 
 
