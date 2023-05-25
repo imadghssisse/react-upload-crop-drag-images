@@ -6,7 +6,7 @@ import UploadIcon from '../../public/UploadIcon.svg';
 import Crop from './crop.js';
 import EditSvg from '../../public/EditSvg.svg';
 
-import { SortableContainer, SortableElement, SortEvent, SortEventWithTag } from 'react-sortable-hoc';
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import { arrayMoveImmutable } from 'array-move';
 
 const styles = {
@@ -139,8 +139,6 @@ class ImageUploader extends React.Component {
     const removeIndex = this.state.pictures.findIndex(e => e === picture);
     const filteredPictures = this.state.pictures.filter((e, index) => index !== removeIndex);
     const filteredFiles = this.state.files.filter((e, index) => index !== removeIndex);
-
-    console.log(this.state.pictures);
     this.setState({ pictures: filteredPictures, files: filteredFiles }, () => {
       this.props.onChange(this.state.files, this.state.pictures);
     });
@@ -199,9 +197,9 @@ class ImageUploader extends React.Component {
   renderPreviewPicturesSortable() {
 
     const targetHasProp = (
-      target: Element | null,
-      hasProp: (target: Element) => boolean,
-    ): boolean => {
+      target,
+      hasProp
+    ) => {
       while (target) {
         if (hasProp(target)) {
           return true;
@@ -215,7 +213,7 @@ class ImageUploader extends React.Component {
       }
       return false;
     };
-    const shouldCancelSortStart = (coach: SortEvent | SortEventWithTag): boolean => {
+    const shouldCancelSortStart = (coach) => {
       // Cancel sort if a user is interacting with a given element
       return targetHasProp(coach.target, (el) => {
         return ['button'].includes(el.tagName.toLowerCase());

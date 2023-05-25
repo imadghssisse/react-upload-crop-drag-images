@@ -5,7 +5,8 @@ import FlipMove from 'react-flip-move';
 import UploadIcon from '../../public/UploadIcon.svg';
 import Crop from './crop.js';
 import EditSvg from '../../public/EditSvg.svg';
-import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import { SortableContainer, SortableElement, SortEvent, SortEventWithTag } from 'react-sortable-hoc';
+import { arrayMoveImmutable } from 'array-move';
 const styles = {
     display: "flex",
     alignItems: "center",
@@ -118,6 +119,7 @@ class ImageUploader extends React.Component {
         const removeIndex = this.state.pictures.findIndex(e => e === picture);
         const filteredPictures = this.state.pictures.filter((e, index) => index !== removeIndex);
         const filteredFiles = this.state.files.filter((e, index) => index !== removeIndex);
+        console.log(this.state.pictures);
         this.setState({ pictures: filteredPictures, files: filteredFiles }, () => {
             this.props.onChange(this.state.files, this.state.pictures);
         });
@@ -160,18 +162,44 @@ class ImageUploader extends React.Component {
             this.props.crop && React.createElement(Crop, { ref: this.childRef, pictures: this.state.pictures, setPictures: (e) => this.setPictures(e) })));
     }
     renderPreviewPicturesSortable() {
-        const SortableItem = SortableElement(({ picture, index }) => React.createElement("div", { className: "uploadPictureContainer" },
-            React.createElement("div", { className: "deleteImage", onClick: () => this.removeImage(picture) }, "X"),
-            this.props.crop && (React.createElement("div", { className: "editImage", onClick: () => this.displayModal(picture, index) },
-                React.createElement("img", { src: EditSvg, className: "EditSvg", alt: "Edit Svg" }))),
-            React.createElement("img", { src: picture, className: "uploadPicture", alt: "preview" })));
+        const targetHasProp = (target, hasProp) => {
+            while (target) {
+                if (hasProp(target)) {
+                    return true;
+                }
+                if (target.className === "deleteImage" || target.className === "editImage") {
+                    target.click();
+                    return true;
+                }
+                // eslint-disable-next-line no-param-reassign
+                target = target.parentElement;
+            }
+            return false;
+        };
+        const shouldCancelSortStart = (coach) => {
+            // Cancel sort if a user is interacting with a given element
+            return targetHasProp(coach.target, (el) => {
+                return ['button'].includes(el.tagName.toLowerCase());
+            });
+        };
+        const SortableItem = SortableElement(({ picture, sortIndex }) => {
+            return (React.createElement("div", { className: "uploadPictureContainer" },
+                React.createElement("div", { className: "deleteImage", onClick: () => this.removeImage(picture) }, "X"),
+                this.props.crop && (React.createElement("div", { className: "editImage", onClick: () => this.displayModal(picture, sortIndex) },
+                    React.createElement("img", { src: EditSvg, className: "EditSvg", alt: "Edit Svg" }))),
+                React.createElement("img", { src: picture, className: "uploadPicture", alt: "preview" })));
+        });
         const SortableList = SortableContainer(({ items }) => {
-            return (React.createElement("div", { className: "b-isSortable" }, items.map((picture, index) => (React.createElement(SortableItem, { key: `item-${index}`, index: index, picture: picture })))));
+            return (React.createElement("div", { className: "b-isSortable" }, items.map((picture, index) => {
+                return React.createElement(SortableItem, { key: `item-${index}`, index: index, picture: picture, sortIndex: index });
+            })));
         });
         const onSortEnd = ({ oldIndex, newIndex }) => {
-            console.log(oldIndex, newIndex);
+            this.setState(({ items }) => ({
+                pictures: arrayMoveImmutable(this.state.pictures, oldIndex, newIndex),
+            }));
         };
-        return React.createElement(SortableList, { items: this.state.pictures, onSortEnd: onSortEnd, axis: "xy" });
+        return React.createElement(SortableList, { items: this.state.pictures, onSortEnd: onSortEnd, axis: "xy", shouldCancelStart: shouldCancelSortStart });
     }
     renderPreviewPictures() {
         return this.state.pictures.map((picture, index) => {
