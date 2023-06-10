@@ -36,7 +36,6 @@ declare namespace ImageUploader {
         const accept: string;
         const name: string;
         const withIcon: boolean;
-        const buttonText: string;
         const buttonType: string;
         const withLabel: boolean;
         const label: string;
@@ -79,8 +78,6 @@ declare namespace ImageUploader {
         export { name_1 as name };
         const withIcon_1: PropTypes.Requireable<boolean>;
         export { withIcon_1 as withIcon };
-        const buttonText_1: PropTypes.Requireable<string>;
-        export { buttonText_1 as buttonText };
         const withLabel_1: PropTypes.Requireable<boolean>;
         export { withLabel_1 as withLabel };
         const label_1: PropTypes.Requireable<string>;

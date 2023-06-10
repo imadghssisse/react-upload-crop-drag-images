@@ -5,6 +5,7 @@ import FlipMove from 'react-flip-move';
 import UploadIcon from '../../public/UploadIcon.svg';
 import Crop from './crop.js';
 import EditSvg from '../../public/EditSvg.svg';
+import Camera from '../../public/Camera.svg';
 
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import { arrayMoveImmutable } from 'array-move';
@@ -296,8 +297,6 @@ class ImageUploader extends React.Component {
     return (
       <div className={"fileUploader " + this.props.className} style={this.props.style}>
         <div className="fileContainer" style={this.props.fileContainerStyle}>
-          {this.renderIcon()}
-          {this.renderLabel()}
           <div className="errorsContainer">
             {this.renderErrors()}
           </div>
@@ -307,7 +306,7 @@ class ImageUploader extends React.Component {
             style={this.props.buttonStyles}
             onClick={this.triggerFileUpload}
           >
-            {this.props.buttonText}
+            <img src={Camera} className="Camera" alt="Camera" />
           </button>
           <input
             type="file"
@@ -334,7 +333,6 @@ ImageUploader.defaultProps = {
   accept: "image/*",
   name: "",
   withIcon: true,
-  buttonText: "Choose images",
   buttonType: "button",
   withLabel: true,
   label: "Max file size: 5mb, accepted: jpg|gif|png",
@@ -367,7 +365,6 @@ ImageUploader.propTypes = {
   accept: PropTypes.string,
   name: PropTypes.string,
   withIcon: PropTypes.bool,
-  buttonText: PropTypes.string,
   withLabel: PropTypes.bool,
   label: PropTypes.string,
   labelStyles: PropTypes.object,

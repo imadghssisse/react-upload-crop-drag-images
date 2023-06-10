@@ -8,6 +8,7 @@ const react_flip_move_1 = tslib_1.__importDefault(require("react-flip-move"));
 const UploadIcon_svg_1 = tslib_1.__importDefault(require("../../public/UploadIcon.svg"));
 const crop_js_1 = tslib_1.__importDefault(require("./crop.js"));
 const EditSvg_svg_1 = tslib_1.__importDefault(require("../../public/EditSvg.svg"));
+const Camera_svg_1 = tslib_1.__importDefault(require("../../public/Camera.svg"));
 const react_sortable_hoc_1 = require("react-sortable-hoc");
 const array_move_1 = require("array-move");
 const styles = {
@@ -232,10 +233,9 @@ class ImageUploader extends react_1.default.Component {
     render() {
         return (react_1.default.createElement("div", { className: "fileUploader " + this.props.className, style: this.props.style },
             react_1.default.createElement("div", { className: "fileContainer", style: this.props.fileContainerStyle },
-                this.renderIcon(),
-                this.renderLabel(),
                 react_1.default.createElement("div", { className: "errorsContainer" }, this.renderErrors()),
-                react_1.default.createElement("button", { type: this.props.buttonType, className: "chooseFileButton " + this.props.buttonClassName, style: this.props.buttonStyles, onClick: this.triggerFileUpload }, this.props.buttonText),
+                react_1.default.createElement("button", { type: this.props.buttonType, className: "chooseFileButton " + this.props.buttonClassName, style: this.props.buttonStyles, onClick: this.triggerFileUpload },
+                    react_1.default.createElement("img", { src: Camera_svg_1.default, className: "Camera", alt: "Camera" })),
                 react_1.default.createElement("input", { type: "file", ref: input => this.inputElement = input, name: this.props.name, multiple: !this.props.singleImage, onChange: this.onDropFile, onClick: this.onUploadClick, accept: this.props.accept }),
                 this.props.withPreview ? this.renderPreview() : null)));
     }
@@ -249,7 +249,6 @@ ImageUploader.defaultProps = {
     accept: "image/*",
     name: "",
     withIcon: true,
-    buttonText: "Choose images",
     buttonType: "button",
     withLabel: true,
     label: "Max file size: 5mb, accepted: jpg|gif|png",
@@ -281,7 +280,6 @@ ImageUploader.propTypes = {
     accept: prop_types_1.default.string,
     name: prop_types_1.default.string,
     withIcon: prop_types_1.default.bool,
-    buttonText: prop_types_1.default.string,
     withLabel: prop_types_1.default.bool,
     label: prop_types_1.default.string,
     labelStyles: prop_types_1.default.object,
